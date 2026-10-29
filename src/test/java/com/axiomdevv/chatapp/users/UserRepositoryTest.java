@@ -78,4 +78,14 @@ class UserRepositoryTest {
         boolean result = userRepository.existsByUsername("unknown");
         assertFalse(result);
     }
+
+    @Test
+    public void save_throws_whenUsernameAlreadyExists() {
+        userRepository.saveAndFlush(new User(USERNAME, EMAIL, "hashedpass"));
+
+        assertThrows(Exception.class, () -> {
+            userRepository.saveAndFlush(new User(USERNAME, "other@example.com", "hashedpass"));
+        });
+
+    }
 }
